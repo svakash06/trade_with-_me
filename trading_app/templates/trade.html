@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Trade</h1>
+    <form method="post" action="{{ url_for('trade') }}">
+        <label for="exchange_segment">Exchange Segment:</label>
+        <input type="text" id="exchange_segment" name="exchange_segment" required>
+        <label for="instrument_type">Instrument Type:</label>
+        <input type="text" id="instrument_type" name="instrument_type" required>
+        <label for="symbol">Symbol:</label>
+        <input type="text" id="symbol" name="symbol" required>
+        <label for="strike_price">Strike Price:</label>
+        <input type="number" id="strike_price" name="strike_price" required>
+        <label for="option_type">Option Type (CE/PE):</label>
+        <input type="text" id="option_type" name="option_type" required>
+        <button type="submit">Get Tokens</button>
+    </form>
+
+    {% if df is not none %}
+    <form method="post" action="{{ url_for('auto_trade') }}">
+        <label for="index">Select Token Index:</label>
+        <select id="index" name="index" required>
+            {% for i in range(df.shape[0]) %}
+            <option value="{{ i }}">{{ i }}</option>
+            {% endfor %}
+        </select>
+        <input type="hidden" name="exchange_segment" value="{{ request.form.exchange_segment }}">
+        <input type="hidden" name="instrument_type" value="{{ request.form.instrument_type }}">
+        <input type="hidden" name="symbol" value="{{ request.form.symbol }}">
+        <input type="hidden" name="strike_price" value="{{ request.form.strike_price }}">
+        <input type="hidden" name="option_type" value="{{ request.form.option_type }}">
+        <button type="submit">Start Auto Trading</button>
+    </form>
+    {% endif %}
+</body>
+</html>
